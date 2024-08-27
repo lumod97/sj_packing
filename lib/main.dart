@@ -1,15 +1,17 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'package:flutter/foundation.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sj_packing/widgets/dialogs/crearSolicitud.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
-import 'package:audioplayers/audioplayers.dart';
+
 
 import 'widgets/solicitudes/solicitudesWidget.dart';
 
 // INICIALIZAR LISTA DE SOLICITUDES
 List<Map<String, dynamic>> listaSolicitudesGlobal = [];
+io.Socket socket = io.io('https://superb-zigzag-behavior.glitch.me');
+
 
 // CONSUMO DE API EN DART
 Future<List<dynamic>> fetchSolicitudes() async {
@@ -72,77 +74,12 @@ class MyApp extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
-                            elevation: 5,
-                            title: const Text('Diálogo de ejemplo'),
-                            content: const SingleChildScrollView(
-                                child: Flexible(
-                                    flex: 7,
-                                    child: Column(
-                                      children: [
-                                        // NUMERO DE LINEA
-                                        TextField(
-                                          decoration: InputDecoration(
-                                            hintText: 'Número de linea',
-                                            border:
-                                                OutlineInputBorder(), // Borde del campo de entrada
-                                          ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        // FRUTA
-                                        TextField(
-                                          decoration: InputDecoration(
-                                            hintText: 'Fruta',
-                                            border:
-                                                OutlineInputBorder(), // Borde del campo de entrada
-                                          ),
-                                        ),
-                                        // VARIEDAD
-                                        TextField(
-                                          decoration: InputDecoration(
-                                            hintText: 'Fruta',
-                                            border:
-                                                OutlineInputBorder(), // Borde del campo de entrada
-                                          ),
-                                        ),
-                                        // CANTIDAD
-                                        TextField(
-                                          decoration: InputDecoration(
-                                            hintText: 'Cantidad',
-                                            border:
-                                                OutlineInputBorder(), // Borde del campo de entrada
-                                          ),
-                                        ),
-                                        // HORA
-                                        TextField(
-                                          decoration: InputDecoration(
-                                            hintText: 'Hora',
-                                            border:
-                                                OutlineInputBorder(), // Borde del campo de entrada
-                                          ),
-                                        ),
-                                        // USUARIO
-                                        TextField(
-                                          decoration: InputDecoration(
-                                            hintText: 'Usuario',
-                                            border:
-                                                OutlineInputBorder(), // Borde del campo de entrada
-                                          ),
-                                        ),
-                                      ],
-                                    ))),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cerrar'),
-                              ),
-                            ],
-                          );
+                          return CrearSolicitudDialog(
+                              socket: socket); // Pasar el socket aquí
                         },
                       );
                     },
+
                     // child: Text('Mostrar Diálogo'),
                   );
                 },
